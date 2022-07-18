@@ -14,7 +14,7 @@
 			      			<h3 class="mb-4">Sign In</h3>
                     </div>
 			      	</div>
-							<form action="{{ route('login') }}" method="POST" class="signin-form">
+							<form action="signin" method="POST" class="signin-form">
                                 @csrf
 			      		<div class="form-group mb-3">
 			      			<label class="label" for="name">Email:</label>

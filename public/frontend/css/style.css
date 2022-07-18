@@ -33,8 +33,9 @@
     size: a3; }
   body {
     min-width: 992px !important; }
-  .container {
-    min-width: 992px !important; }
+.con{
+  width: 90%;
+}
   .navbar {
     display: none; }
   .badge {
@@ -255,6 +256,7 @@ h1, h2, h3, h4, h5,
    ========================================================================== */
    main{
     min-height: 110vh;
+    max-width: 100%;
     background-image: linear-gradient(to bottom right, #9636d9, #fbb7e6);
 
   }
