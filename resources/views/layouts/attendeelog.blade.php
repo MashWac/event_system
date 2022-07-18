@@ -19,7 +19,6 @@
     <link href="{{ asset('frontend/css/style.css')}}" rel="stylesheet">
 </head>
 <body>
-@include('layouts.inc.nav')
         <main class="py-4">
             <div class="content">
                 @yield('content')
@@ -30,6 +29,8 @@
     <!----Scripts--->
     <script src="{{ asset('frontend/js/bootstrap.bundle.min.js') }}" defer></script>
     <script src="{{ asset('frontend/js/formdisplay.js') }}" defer></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
     @if(session('status'))
     <script>
         swal("{{session('status')}}")
