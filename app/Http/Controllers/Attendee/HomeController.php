@@ -120,4 +120,9 @@ class HomeController extends Controller
 
     }
 
+    public function profilePage(Attendee $attendee)
+    {
+        return view('Attendee.attendeeprofile')->with(['attendee' => $attendee]);
+    }
+
 }
