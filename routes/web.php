@@ -61,7 +61,7 @@ Route::get('contentfeedback', [ArtistHomeController::class,'feedback']);
 
 
 
-
+Route::get('/profile/{attendee}', [HomeController::class, 'profilePage']);
 
 
 Auth::routes();
