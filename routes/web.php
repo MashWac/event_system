@@ -80,7 +80,7 @@ Route::get('rejectoffer/{id}', [ArtistHomeController::class,'rejectoffer']);
 
 
 
-
+Route::get('/profile/{attendee}', [HomeController::class, 'profilePage']);
 
 
 Auth::routes();

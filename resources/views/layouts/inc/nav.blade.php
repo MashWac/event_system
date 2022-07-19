@@ -36,7 +36,7 @@
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="logout">
+                            <a class="dropdown-item" href="/profile/{{session('user_id')}}">
                                 {{ __('View Profile') }}
                             </a>
                             <a class="dropdown-item" href="logout">
