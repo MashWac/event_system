@@ -55,18 +55,19 @@
                         <th>Date of Event</th>
                         <th>Date of Approval</th>
                         <th>Image</th>
-                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
+                @foreach($data['accepts'] as $item)
                     <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td>{{$item->first_name}} AKA{{$item->stage_name}}</td>
+                        <td>{{$item->event_name}}</td>
+                        <td>{{$item->event_date}}</td>
+                        <td>{{$item->dateofbooking}}</td>
+                        <td><img src="{{asset('/assets/uploads/artists/'.$item->artist_photo) }}" height="130px" width="100px" alt='image here'></td>
+
                     </tr>
+                @endforeach
                 </tbody>
             </table>
         </div>

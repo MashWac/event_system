@@ -58,16 +58,10 @@
                                 <div class="card-body">
                                     <h5 class="card-title">Event Date: {{$item->event_date}} Location: {{$item->location}}</h5>
                                     <p class="card-text">{{$item->event_description}}</p>
-                                    <a href="">
+                                    <p class="card-text"><small class="text-muted">Last updated {{$item->updated_at}}</small></p>
+                                    <a href="{{url('viewevent/'.$item->event_id)}}">
                                         <button type="submit" class="btn btn-primary">View Event Performance</button>
                                     </a>
-                                    <a href="">
-                                        <button class="btn btn-moreinfo btn-dark" style="margin-top:6px;">Payout Artists</button>
-                                    </a>
-                                    <a href="">
-                                        <button class="btn btn-moreinfo btn-danger" style="margin-top:6px;">Delete Event</button>
-                                    </a>
-                                    <p class="card-text"><small class="text-muted">Last updated {{$item->updated_at}}</small></p>
                                 </div>
                                 </div>
                             </div>

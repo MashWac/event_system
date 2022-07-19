@@ -14,47 +14,66 @@
                         <th>Ticket Type</th>
                         <th>Status</th>
                         <th>Ticket Price</th>
+                        <th>Remaining tickets</th>
                         <th>Quantity</th>
                         <th>SubTotal</th>
                     </tr>
                 </thead>
                 <tbody>
+                    <?php $count=0;?>
                 @foreach($data['ticket'] as $item)
+
+
+
                     <tr>
-                        <td>{{$item->ticket_type}}</td>
+                        <td id="ticketname">{{$item->ticket_type}}</td>
                         @if(($item->status_open)==0)
                         <td>Open</td>
                         @else
                         <td>Closed</td>
                         @endif
                         <td>{{$item->ticket_price}}</td>
+                        <td>{{$item->ticket_quantity}}</td>
                         @if((($item->status_open)==0)&&((($item->ticket_quantity)>0)))
                         <td>
-                            <select class="form-select form-select-sm formquan" name="ticketquantity" id="ticketquantity" aria-label=".form-select-sm example">
-                                <option selected value="0"></option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                                <option value="7">7</option>
-                                <option value="8">8</option>
-                                <option value="9">9</option>
-                                <option value="10">10</option>
-                            </select>
+
+                        <form action="{{url('cart')}}" method="POST">
+                            @csrf 
+                            @foreach($data['ritems'] as $things)
+                                @if($things['ticket_type']==$item->ticket_type)
+                                    <select type='number' class="form-select form-select-sm formquan" onchange="this.form.submit()" name="ticketquantity" id="ticketquantity" aria-label=".form-select-sm example">
+                                        <option value="0" <?=$things['quantity']==0 ? ' selected="selected"' : '';?>></option>
+                                        <option value="1" <?=$things['quantity']==1 ? ' selected="selected"' : '';?> >1</option>
+                                        <option value="2" <?=$things['quantity']==2 ? ' selected="selected"' : '';?>>2</option>
+                                        <option value="3" <?=$things['quantity']==3 ? ' selected="selected"' : '';?>>3</option>
+                                        <option value="4" <?=$things['quantity']==4 ? ' selected="selected"' : '';?>>4</option>
+                                        <option value="5" <?=$things['quantity']==5 ? ' selected="selected"' : '';?>>5</option>
+                                        <option value="6" <?=$things['quantity']==6 ? ' selected="selected"' : '';?>>6</option>
+                                        <option value="7" <?=$things['quantity']==7 ? ' selected="selected"' : '';?>>7</option>
+                                        <option value="8" <?=$things['quantity']==8 ? ' selected="selected"' : '';?>>8</option>
+                                        <option value="9" <?=$things['quantity']==9 ? ' selected="selected"' : '';?>>9</option>
+                                        <option value="10" <?=$things['quantity']==10 ? ' selected="selected"' : '';?>>10</option>
+                                    </select>
+                                @endif
+                            @endforeach
                             <input type='hidden'  name="ticket_price" value="{{$item->ticket_price}}" width="0px">
                             <input type='hidden'  name="ticket_name" value="{{$item->ticket_type}}" width="0px">
+                        </form>
                             
-                        </div></td>
+                        </td>
                         @else
                         <td>
                             <input type="number" name="quantityticket" id="quantityticket" readonly>
                         </td>
                         @endif
-                        <td id="loop" class="ptotal"><span id="totalsub">0</span> </td>
+                        @foreach($data['ritems'] as $things)
+                                @if($things['ticket_type']==$item->ticket_type)
+                        <td id="loop" class="ptotal"><span id="totalsub">{{$things['subtotal']}}</span> </td>
+                        @endif
+                        @endforeach
 
                     </tr>
+                    <?php $count++ ?>
                 @endforeach
                 </tbody>
             </table>
@@ -78,10 +97,12 @@
                         <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
                         <div class="accordion-body">
                             <p>Make Payment From Wallet<br><br>
-                                <form method="post" action="checkout">
-                                <input type="hidden" name="paymenttype" id="paymenttype" value="wallet">
-                                <input type="hidden" name="totalpay" id="totalpay" class="totalpay">
-                                <button type="submit" class="btn btn-dark" style="background-color:#E223E2;">Complete Purchase</button>
+                                <form method="post" action="{{url('checkout')}}">
+                                    @csrf
+                                    <input type="text" name="tickdetails" id="paymenttype" value="">
+                                    <input type="hidden" name="paymenttype" id="paymenttype" value="wallet">
+                                    <input type="hidden" name="totalpay" id="totalpay" class="totalpay">
+                                    <button type="submit" class="btn btn-dark" style="background-color:#E223E2;">Complete Purchase</button>
                                 </form>
                         </div>
                         </div>
@@ -94,7 +115,8 @@
                         </h2>
                         <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
                             <div class="accordion-body">
-                                <form method="post" action="checkout">
+                                <form method="post" action="{{url('checkout')}}">
+                                    @csrf
                                     <div class="row">
                                         <div class="col-md-6">
                                             <label for="mpesanumber">Enter phone Number:</label>

@@ -93,6 +93,7 @@
     <script src="{{ asset('frontend/js/dropdown.js') }}" defer></script>
     <script src="{{ asset('frontend/js/eventtypecheck.js') }}" defer></script>
     <script src="{{ asset('frontend/js/orgeventmodal.js') }}" defer></script>
+    <script src="{{ asset('frontend/js/payoutform.js') }}" defer></script>
 
     <script src="{{ asset('frontend/js/formdisplay.js') }}" defer></script>
     <script src="{{ asset('frontend/js/modalpopup.js') }}" defer></script>

@@ -16,6 +16,12 @@ use App\Models\ArtistWallet;
 use App\Models\BookingsModel;
 use Carbon\Carbon;
 use PHPUnit\Framework\Constraint\IsEmpty;
+use App\Models\PerformanceModel;
+use App\Models\PurchasesModel;
+use App\Models\ReversalModel;
+use App\Models\ArtistsPaymentModel;
+use App\Models\OrganiserWallet;
+use App\Models\PaymentMethodsModel;
 
 
 class EventOrganiserController extends Controller
@@ -98,17 +104,79 @@ class EventOrganiserController extends Controller
         }
         return redirect('products')->with('status','Product Added Successfully.');
     }
+    public function updateevent(Request $request,$id){
+        $event=EventModel::find($id);
+        $tickettype=new TickettypeModel;
+        if($request->hasFile('eventflyer')){
+            $file=$request->file('eventflyer');
+            $ext=$file->getClientOriginalExtension();
+            $filename= time().'.'.$ext;
+            $file->move('assets/uploads/events/',$filename);
+            $event->event_flyer=$filename;
+        }
+        $event->event_name=$request->input('eventname');
+        $event->location=$request->input('location');
+        $event->event_description=$request->input('eventdescr');
+        $event->event_creator=session('user_id');
+        $event->event_date=$request->input('eventtime');
+        $event->updated_at= Carbon::now();
+        $event->update();
+        return redirect('activeevents')->with('status','Event Updated Successfully.');
+
+    }
     public function activeevents(){
         $organiser=session('user_id');
         // get the current time
         $current = Carbon::now();
         $event=new EventModel;
+        $booking=new BookingsModel;
+        $artists=new Artists;
         // sub 3 hours to the current time
         $eventtime = $current->subHours(3);
+        $noadds=$current->subDays(2);
 
         $data['events']=$event->whereDate('event_date', '>=',$eventtime->toDateString())->where('is_deleted',0)->where('event_creator',$organiser)->get();
+        $data['waiting']=$artists->where('artists.is_deleted',0)->join('bookings', 'artists.artist_id', '=', 'bookings.artist_id')->where('bookings.approval_status','Accepted')->where('bookings.is_deleted','0')->join('tbl_event', 'bookings.event_id', '=', 'tbl_event.event_id')->whereDate('event_date', '>=',$noadds->toDateString())->where('tbl_event.is_deleted',0)->where('event_creator',$organiser)->get();
 
         return view('Organisers.activeevents',compact('data'));
+    }
+    public function addtoevent($id,$event_id,$booking_id){
+        $event= EventModel::find($event_id);
+        $organiser=$event->event_creator;
+        $time_event=$event->event_date;
+        $time_event= Carbon::create($time_event);
+        $time_before=$time_event->subHours(4);
+        $performance= new PerformanceModel();
+        $data=$performance->where('event_performances.performer_id',$id)->where('event_performances.is_deleted',0)->join('tbl_event', 'event_performances.event_id', '=', 'tbl_event.event_id')->where('tbl_event.is_deleted',0)->whereDate('event_date', '>=',$time_before->toDateString())->whereDate('event_date', '<=',$time_event->toDateString())->get();
+        if($data->IsEmpty()){
+            $performance->performer_id=$id;
+            $performance->event_id=$event_id;
+            $performance->organiser_id=$organiser;
+            $performance->updated_at= Carbon::now();
+            $performance->accepted_booking=$booking_id;
+            if($performance->save()){
+                $bookings= new BookingsModel();
+                $datab=$bookings->where('event_id',$event_id)->where('artist_id',$id)->where('organiser_id',$organiser)->get();
+
+                foreach($datab as $item){
+                    $item->is_deleted=1;
+                    $item->updated_at= Carbon::now();
+                    $item->update();
+                 
+                }
+                return redirect('activeevents')->with('status','Performer Has Been Added To Event');
+            }
+            else{
+                return redirect('activeevents')->with('status','Error Adding Performer.');
+
+            }
+
+
+
+        }else{
+            return redirect('activeevents')->with('status','Cannot Add Performer. Conflicting Performce Time With Another Event.');
+        }
+
     }
 
     public function previousevents(){
@@ -122,6 +190,61 @@ class EventOrganiserController extends Controller
         $data['events']=$event->whereDate('event_date', '<',$eventtime->toDateString())->where('is_deleted',0)->where('event_creator',$organiser)->get();
         return view('Organisers.previousevents',compact('data'));
     }
+    public function deleteevent($event_id){
+        $event=new EventModel();
+        $del_event=EventModel::find($event_id);
+        $eventdate=$del_event->event_date;
+        $eventdate=Carbon::create($eventdate);
+        $current=Carbon::now();
+        $current=$current->subHours(3);
+        $timebefore=$eventdate->subDays(2);
+        if($eventdate<=$timebefore){
+            $del_event->is_deleted=1;
+            $del_event->updated_at=Carbon::now();
+            $del_event->update();
+            return redirect('organisers')->with('status','Event Has been deleted.');
+
+        }elseif($eventdate<=$current){
+            return redirect('organisers')->with('status','Event is too soon cannot be deleted.');
+        }  
+        else{
+            $purchases=new PurchasesModel();
+            $refund_amount=$purchases->where('event_id',$event_id)->sum('order_amount');
+            $reversal=new ReversalModel();
+            $reversal->event_id=$event_id;
+            $reversal->reversal_amount=$refund_amount;
+            $reversal->save();
+
+            $del_event->is_deleted=1;
+            $del_event->updated_at=Carbon::now();
+            $del_event->update();
+            return redirect('organisers')->with('status','Event Has been deleted.');
+
+
+        }
+
+    }
+    public function viewevent($id){
+        $data['viewevent']=EventModel::find($id);
+        $paymeths= new PaymentMethodsModel();
+        $data['paymethods']=$paymeths->all();
+        $payouts=new ArtistsPaymentModel();
+        $performances=new PerformanceModel();
+        $data['performance']=$performances->where('event_performances.is_deleted',0)->where('event_performances.event_id',$id)->join('tbl_event', 'event_performances.event_id', '=', 'tbl_event.event_id')->join('artists', 'event_performances.performer_id', '=', 'artists.artist_id')->join('bookings', 'event_performances.accepted_booking', '=', 'bookings.booking_id')->get();
+        $data['payout']=$payouts->join('event_performances', 'artist_payment.event_id', '=', 'event_performances.event_id')->groupBy('artist_payment.recepient_id')->sum('amount');
+        return view('Organisers.viewevent',compact('data'));
+    }
+    public function editevent($id){
+        $data['event']=EventModel::find($id);
+        $tickettypes=new TickettypeModel();
+        $data['tickettypes']=$tickettypes->where('event_id',$id)->get();
+        return view('Organisers.editevent',compact('data'));
+    }
+    public function deleteperformance($id){
+        $performance=PerformanceModel::find($id);
+        $performance->is_deleted=1;
+        $performance->update();
+    }
     public function findartists(){
         $organiser=session('user_id');
         // get the current time
@@ -130,9 +253,25 @@ class EventOrganiserController extends Controller
         // sub 3 hours to the current time
         $eventtime = $current->subHours(3);
 
-        $data['events']=$event->whereDate('event_date', '>=',$eventtime->toDateString())->where('is_deleted',0)->where('event_creator',$organiser)->get();
+        $data['events']=$event->where('is_deleted',0)->whereDate('event_date', '>=',$eventtime->toDateString())->where('event_creator',$organiser)->get();
         $data['artists']=Artists::all();
         return view('Organisers.findartists',compact('data'));
+    }
+    public function payartist(Request $request){
+        $payment_artist=new ArtistsPaymentModel();
+        $artist_wallet=new ArtistWallet();
+        $organiser_wallet=new OrganiserWallet();
+        $payment_artist->amount=$request->input('paymentamount');
+        $payment_artist->payer_id=$request->input('organiserid');
+        $payment_artist->recepient_id=$request->input('artist_id');
+        $payment_artist->event_id=$request->input('event_id');
+        $payment_artist->paylists=$request->input('organiserid');
+
+        $payment_artist->save();
+
+        $artist_wallet->artist_id=$request->input('artist_id');
+        $artist_wallet->save();
+
     }
     public function sendrequest(Request $request){
         $booking=new BookingsModel();
@@ -149,13 +288,18 @@ class EventOrganiserController extends Controller
             return redirect('findartists')->with('status','Request unsuccessful');
 
         }
-
     }
     public function acceptedrequests(){
-        return view('Organisers.acceptedrequests');
+        $organiser=session('user_id');
+        $artists=new Artists;
+        $data['accepts']=$artists->where('artists.is_deleted',0)->join('bookings', 'artists.artist_id', '=', 'bookings.artist_id')->where('bookings.approval_status','Accepted')->join('tbl_event', 'bookings.event_id', '=', 'tbl_event.event_id')->where('event_creator',$organiser)->get();
+        return view('Organisers.acceptedrequests',compact('data'));
     }
     public function deniedrequests(){
-        return view('Organisers.deniedrequests');
+        $organiser=session('user_id');
+        $artists=new Artists;
+        $data['rejects']=$artists->where('artists.is_deleted',0)->join('bookings', 'artists.artist_id', '=', 'bookings.artist_id')->where('bookings.approval_status','rejected')->join('tbl_event', 'bookings.event_id', '=', 'tbl_event.event_id')->where('event_creator',$organiser)->get();
+        return view('Organisers.deniedrequests',compact('data'));
     }
 
 }

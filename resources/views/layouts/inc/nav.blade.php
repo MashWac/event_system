@@ -42,7 +42,7 @@
                             <a class="dropdown-item" href="logout">
                                 {{ __('My Wallet') }}
                             </a>
-                            <a class="dropdown-item" href="logout">
+                            <a class="dropdown-item" href="{{url('logout')}}">
                                 {{ __('Logout') }}
                             </a>
                         </div>

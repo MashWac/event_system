@@ -24,17 +24,18 @@
                                 <div class="card-body">
                                     <h5 class="card-title">Event Date: {{$item->event_date}} Location: {{$item->location}}</h5>
                                     <p class="card-title">{{$item->event_description}}</p>
-                                    <a href="">
-                                        <button type="submit" class="btn btn-primary">View Event Performance</button>
-                                    </a>
-                                    <a href="">
-                                        <button class="btn btn-moreinfo btn-dark" style="margin-top:6px;">Edit Event</button>
-                                    </a>
-                                    <a href="">
-                                        <button class="btn btn-moreinfo btn-danger" style="margin-top:6px;">Delete Event</button>
-                                    </a>
+
                                     <p class="card-text"><small class="text-muted">Last updated {{$item->updated_at}}</small></p>
 
+                                    <a href="{{url('viewevent/'.$item->event_id)}}">
+                                        <button type="submit" class="btn btn-primary">View Event Performance</button>
+                                    </a>
+                                    <a href="{{url('editevent/'.$item->event_id)}}">
+                                        <button class="btn btn-moreinfo btn-dark" style="margin-top:6px;">Edit Event</button>
+                                    </a>
+                                    <a href="{{url('deleteevent/'.$item->event_id)}}">
+                                        <button class="btn btn-moreinfo btn-danger" style="margin-top:6px;">Delete Event</button>
+                                    </a>
                                 </div>
                                 </div>
                             </div>
@@ -103,14 +104,20 @@
                     </tr>
                 </thead>
                 <tbody>
+                @foreach($data['waiting'] as $item)
                     <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td>{{$item->first_name}} AKA{{$item->stage_name}}</td>
+                        <td>{{$item->event_name}}</td>
+                        <td>{{$item->event_date}}</td>
+                        <td>{{$item->dateofbooking}}</td>
+                        <td><img src="{{asset('/assets/uploads/artists/'.$item->artist_photo) }}" height="130px" width="100px" alt='image here'></td>
+                        <td>
+                            <a href="{{url('addtoevent/'.$item->artist_id.'/'.$item->event_id.'/'.$item->booking_id)}}">
+                                <button type="submit" class="btn btn-primary" >Add Artist</button>
+                            </a>
+                        </td>
                     </tr>
+                @endforeach
                 </tbody>
             </table>
         </div>

@@ -30,7 +30,10 @@ Route::get('refunds', [HomeController::class,'refunds']);
 Route::get('viewartist/{id}', [HomeController::class,'artistpage']);
 Route::get('followartist/{id}', [HomeController::class,'followartist']);
 Route::get('buytickets/{id}', [HomeController::class,'buytickets']);
+Route::post('cart', [HomeController::class,'updatecart']);
 Route::post('checkout', [HomeController::class,'checkout']);
+
+
 
 
 
@@ -44,6 +47,18 @@ Route::get('deniedrequests', [EventOrganiserController::class,'deniedrequests'])
 Route::get('acceptedrequests', [EventOrganiserController::class,'acceptedrequests']);
 Route::post('addevent', [EventOrganiserController::class,'addevent']);
 Route::post('sendrequest', [EventOrganiserController::class,'sendrequest']);
+Route::get('addtoevent/{id}/{event_id}/{bookin_id}', [EventOrganiserController::class,'addtoevent']);
+Route::get('deleteevent/{id}', [EventOrganiserController::class,'deleteevent']);
+Route::get('viewevent/{id}', [EventOrganiserController::class,'viewevent']);
+Route::get('editevent/{id}', [EventOrganiserController::class,'editevent']);
+Route::put('updateevent/{id}', [EventOrganiserController::class,'updateevent']);
+
+
+
+Route::post('payartist', [EventOrganiserController::class,'payartist']);
+
+
+
 
 
 Route::post('reguser', [Registration::class,'storeuser']);
@@ -58,6 +73,10 @@ Route::get('eventbookings', [ArtistHomeController::class,'bookings']);
 Route::get('videodisplay', [ArtistHomeController::class,'display']);
 Route::get('albumsdisplay', [ArtistHomeController::class,'display2']);
 Route::get('contentfeedback', [ArtistHomeController::class,'feedback']);
+Route::get('acceptoffer/{id}', [ArtistHomeController::class,'acceptoffer']);
+Route::get('rejectoffer/{id}', [ArtistHomeController::class,'rejectoffer']);
+
+
 
 
 
