@@ -5,7 +5,7 @@ use App\Http\Controllers\Attendee\HomeController;
 use App\Http\Controllers\Organisers\EventOrganiserController;
 use App\Http\Controllers\Authentication\Registration;
 use App\Http\Controllers\Artist\ArtistHomeController;
-
+use App\Http\Controllers\EventController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -37,10 +37,6 @@ Route::get('/profile/{attendee}', [HomeController::class, 'profilePage']);
 
 
 
-
-
-
-
 Route::get('organisers', [EventOrganiserController::class,'index']);
 Route::get('createevent', [EventOrganiserController::class,'createevent']);
 Route::get('activeevents', [EventOrganiserController::class,'activeevents']);
@@ -56,6 +52,8 @@ Route::get('viewevent/{id}', [EventOrganiserController::class,'viewevent']);
 Route::get('editevent/{id}', [EventOrganiserController::class,'editevent']);
 Route::put('updateevent/{id}', [EventOrganiserController::class,'updateevent']);
 Route::get('organiserprofile', [EventOrganiserController::class, 'organiserprofile']);
+
+Route::get('/search', [EventController::class, 'search']);
 
 
 
