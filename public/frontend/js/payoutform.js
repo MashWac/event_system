@@ -37,3 +37,12 @@ function showmpesabox(){
     }
 
 }
+function editorgphone(val) {
+    document.getElementById('phonedorganiser').value= val;
+    document.getElementById('phoneworganiser').value= val;
+
+}
+function editorgamount(val) {
+    document.getElementById('depositorganiser').value= val;
+    document.getElementById('withdraworganiser').value= val;}
+

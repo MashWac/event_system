@@ -27,11 +27,11 @@ use App\Models\PerformanceModel;
 class ArtistHomeController extends Controller
 {
     public function index(){
-        return view('Artists/index');
+        return view('Artists.index');
     }
 
     public function content(){
-        return view('Artists/mycontent');
+        return view('Artists.mycontent');
     }
 
     public function bookings(){
@@ -42,7 +42,7 @@ class ArtistHomeController extends Controller
         // sub 3 hours to the current time
         $eventtime = $current->subDays(2);
         $data['bookings']=$bookings->where('bookings.is_deleted',0)->where('bookings.approval_status','Pending')->whereDate('bookings.created_at', '>=',$eventtime->toDateString())->where('bookings.artist_id',$artist_id)->join('tbl_event', 'bookings.event_id', '=', 'tbl_event.event_id')->where('tbl_event.is_deleted',0)->join('event_organisers', 'tbl_event.event_creator', '=', 'event_organisers.organiser_id')->paginate(8);
-        return view('Artists/eventbookings',compact('data'));
+        return view('Artists.eventbookings',compact('data'));
     }
     public function rejectoffer($id){
         $bookings=BookingsModel::find($id);
@@ -77,18 +77,29 @@ class ArtistHomeController extends Controller
     }
 
     public function feedback(){
-        return view('Artists/contentfeedback');
-    }
-
-    public function logout(){
-        return view('Artists/logout');
+        return view('Artists.contentfeedback');
     }
 
     public function display(){
-        return view('Artists/videodisplay');
+        return view('Artists.videodisplay');
     }
 
     public function display2(){
-        return view('Artists/albumsdisplay');
+        return view('Artists.albumsdisplay');
+    }
+    public function myartistprofile()
+    {
+        $userid=session('user_id');
+        $performances=new PerformanceModel();
+        $artistwallet=new ArtistWallet();
+        $followers=new FollowModel();
+        $current=Carbon::now();
+        $data['followers']=$followers->where('following',$userid)->count();
+        $data['artist']=Artists::find($userid);
+        $data['wallet']=$artistwallet->where('artist_id', $userid)->get();
+        $data['schedule']=$performances->where('performer_id',$userid)->join('tbl_event', 'event_performances.event_id', '=', 'tbl_event.event_id')->join('bookings', 'event_performances.accepted_booking', '=', 'bookings.booking_id')->join('event_organisers', 'event_performances.organiser_id', '=', 'event_organisers.organiser_id')->paginate(10);
+        $data['events']=$performances->where('performer_id',$userid)->join('tbl_event', 'event_performances.event_id', '=', 'tbl_event.event_id')->join('bookings', 'event_performances.accepted_booking', '=', 'bookings.booking_id')->join('event_organisers', 'event_performances.organiser_id', '=', 'event_organisers.organiser_id')->whereDate('event_date', '<',$current->toDateString())->paginate(10);
+
+        return view('Artists.artistprofile',compact('data'));
     }
 }

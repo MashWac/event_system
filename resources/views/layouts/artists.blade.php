@@ -32,7 +32,11 @@
     <script src="{{ asset('frontend/js/jquery-3.6.0.min.js') }}" defer></script>
     <script src="{{ asset('frontend/js/bootstrap.bundle.min.js') }}" defer></script>
     <script src="{{ asset('frontend/js/formdisplay.js') }}" defer></script>
+    <script src="{{ asset('frontend/js/imgdisplay.js') }}" defer></script>
+
     <script src="{{ asset('frontend/js/modalpopup2.js') }}" defer></script>
+    <script src="{{ asset('frontend/js/modalpop3.js') }}" defer></script>
+
     <script src="{{ asset('frontend/js/videoplay.js') }}" defer></script>
     <script src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>

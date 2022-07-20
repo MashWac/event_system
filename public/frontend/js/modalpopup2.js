@@ -34,3 +34,4 @@ $(".btnshowmodal").on("click", function () {
 function closediv(){
     document.getElementById("bgg").style.display="none";
 }
+

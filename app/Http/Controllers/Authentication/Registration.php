@@ -16,6 +16,9 @@ use PHPUnit\Framework\Constraint\IsEmpty;
 
 class Registration extends Controller
 {
+    public function landing(){
+        return view('Landing.index');
+    }
 
     public function storeuser(Request $request){
         $artist=new Artists();

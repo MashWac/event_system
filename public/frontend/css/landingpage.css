@@ -1,0 +1,172 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+    height: max-content;
+}
+
+#artbackground{
+    width: 100%;
+    background-image: url(/frontend/assets/animation.gif);
+    background-size: cover;
+    height: 100vh;
+}
+
+section{
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    padding: 100px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fff;
+}
+
+header{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px 100px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgb(52, 52, 52);
+}
+
+header img{
+    width: 50px;
+    height: 50px;
+    background-color: rgb(111, 48, 151);
+}
+
+
+header .landing-logo{
+    position: relative;
+    max-width: 80px;
+}
+
+header ul{
+    position: relative;
+    display: flex;
+}
+
+header ul li{
+    list-style: none;
+}
+
+header ul li a{
+    display: inline-block;
+    color: whitesmoke;
+    font-weight: 400;
+    margin-left: 40px;
+    text-decoration: none;
+}
+
+.landing-content{
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.landing-content .textBox{
+    position: relative;
+    max-width: 600px;
+}
+
+.landing-content .textBox h2{
+    color: #333;
+    font-size: 4em;
+    line-height: 1.4em;
+    font-weight: 500;
+}
+
+.landing-content .textBox h2 span{
+    color:#000;
+    font-size: 1.2em;
+    font-weight: 900;
+}
+
+.landing-content .textBox p{
+    color: #333;
+}
+
+.landing-content .textBox a{
+    display: inline-block;
+    margin-top: 20px;
+    padding: 8px 20px;
+    background: #333;
+    color: #fff;
+    border-radius: 40px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-decoration: none;
+}
+
+.landing-content .imgBox{
+    width: 600px;
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 50px;
+    margin-top: 50px;
+}
+
+.landing-content .imgBox img{
+    max-width: 200px;
+}
+
+.thumbnail{
+    position: absolute;
+    left: 50%;
+    bottom: 20px;
+    transform: translateX(-50%);
+    display: flex;
+}
+
+.thumbnail li{
+    list-style: none;
+    display: inline-block;
+    margin: 0 20px;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+.thumbnail li:hover{
+    transform: translateY(-15px);
+}
+
+.thumbnail li img{
+    max-width: 60px;
+}
+
+.sci{
+    position: absolute;
+    top:20%;
+    right: 0%;
+
+}
+
+.sci li{
+    list-style: none;
+}
+
+.sci li a {
+    display: inline-flex;
+    margin: 5px 0;
+    transform: scale(0.6);
+    filter: invert();
+}
+
+.circle{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 96.5%;
+    background: #333;
+    clip-path: circle(600px at right 800px);
+}

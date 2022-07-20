@@ -22,12 +22,41 @@ use App\Models\ReversalModel;
 use App\Models\ArtistsPaymentModel;
 use App\Models\OrganiserWallet;
 use App\Models\PaymentMethodsModel;
+use App\Models\FollowModel;
 
 
 class EventOrganiserController extends Controller
 {
     public function index(){
-        return view('Organisers.index');
+        $tickets=new TicketModel();
+        $attendees=new Attendee();
+        $artists=new Artists();
+        $user=session('user_id');
+        $data['totalticketsold']=$tickets->join('ticket_types', 'tickets.ticket_type', '=', 'ticket_types.tickettype_id')->join('tbl_event', 'tickets.event_id', '=', 'tbl_event.event_id')->where('tbl_event.event_creator',$user)->selectRaw("COUNT(*) as count, DATE_FORMAT(tickets.created_at, '%Y %m %e') as created_data")
+        ->whereBetween('tickets.created_at', [Carbon::createFromDate(2020,3,4), Carbon::now()])
+        ->groupBy('tickets.created_at')
+        ->get();
+
+        $data['gendermaledemographics']=$tickets->join('ticket_types', 'tickets.ticket_type', '=', 'ticket_types.tickettype_id')->join('tbl_event', 'tickets.event_id', '=', 'tbl_event.event_id')->where('tbl_event.event_creator',$user)->join('users', 'users.user_id', '=', 'tickets.buyer')->where('users.gender','male')->count();
+        $data['genderfemaledemographics']=$tickets->join('ticket_types', 'tickets.ticket_type', '=', 'ticket_types.tickettype_id')->join('tbl_event', 'tickets.event_id', '=', 'tbl_event.event_id')->where('tbl_event.event_creator',$user)->join('users', 'users.user_id', '=', 'tickets.buyer')->where('users.gender','female')->count();
+        $data['genders']=['males'=>$data['gendermaledemographics'], 'females'=>$data['genderfemaledemographics']];
+        $data['totalsales']=$tickets->join('ticket_types', 'tickets.ticket_type', '=', 'ticket_types.tickettype_id')->join('tbl_event', 'tickets.event_id', '=', 'tbl_event.event_id')->where('tbl_event.event_creator',$user)->count();
+        $newdatedata=[];
+        $datachecked=[];
+        $timings=[];
+        $times=[];
+        $alltimes=[];
+        $current=0;
+        $wow=[];
+        foreach(compact($data['totalticketsold']) as $item){
+            $timecreate=$item['created_data'];
+            $thecount=$item['count'];
+            array_push($datachecked,array($timecreate=>$thecount));
+        }
+
+        print_r($datachecked);
+
+
     }
     public function createevent(){
         return view('Organisers.createevent');
@@ -247,6 +276,8 @@ class EventOrganiserController extends Controller
     }
     public function findartists(){
         $organiser=session('user_id');
+        $followers=new FollowModel();
+        $current=Carbon::now();
         // get the current time
         $current = Carbon::now();
         $event=new EventModel;
@@ -255,6 +286,11 @@ class EventOrganiserController extends Controller
 
         $data['events']=$event->where('is_deleted',0)->whereDate('event_date', '>=',$eventtime->toDateString())->where('event_creator',$organiser)->get();
         $data['artists']=Artists::all();
+        foreach($data['artists'] as $item){
+            $artistid=$item->artist_id;
+            $data['followers']=$followers->where('following',$artistid)->count();
+            $item->followers=$data['followers'];
+        }
         return view('Organisers.findartists',compact('data'));
     }
     public function payartist(Request $request){
@@ -300,6 +336,15 @@ class EventOrganiserController extends Controller
         $artists=new Artists;
         $data['rejects']=$artists->where('artists.is_deleted',0)->join('bookings', 'artists.artist_id', '=', 'bookings.artist_id')->where('bookings.approval_status','rejected')->join('tbl_event', 'bookings.event_id', '=', 'tbl_event.event_id')->where('event_creator',$organiser)->get();
         return view('Organisers.deniedrequests',compact('data'));
+    }
+    public function organiserprofile()
+    {
+        $userid=session('user_id');
+        $tickets=new TicketModel();
+        $organiserwallet=new OrganiserWallet();
+        $data['organiser']=Organiser::find($userid);
+        $data['wallet']=$organiserwallet->where('organiser_id', $userid)->get();
+        return view('Organisers.organiserprofile', compact('data'));
     }
 
 }

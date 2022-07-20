@@ -67,7 +67,7 @@
                         <td>{{$item->first_name}} {{$item->last_name}}</td>
                         <td>{{$item->stage_name}}</td>
                         <td>{{$item->created_at}}</td>
-                        <td></td>
+                        <td>{{$item->followers}}</td>
                         <td><img src="{{asset('/assets/uploads/artists/'.$item->artist_photo) }}" height="130px" width="100px" alt='image here'></td>
                         <td> 
                             

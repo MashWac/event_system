@@ -21,7 +21,7 @@
     </div>
 </div> 
  <body> -->
-	<h1 class="py-4"> MY VIDEOS</h1>
+	<!-- <h1 class="py-4"> MY VIDEOS</h1>
 <div class="Videos-single">
     <img src="/frontend/assets/gallery8.jpg" alt="" width="100%">
     <img src="/frontend/assets/playicon.png" alt="" width="" class="play-button" onclick="playvideo('/frontend/assets/concert.mp4')">
@@ -67,9 +67,9 @@
     </video>
     <div class="close-button" onclick="stopvideo()" style="color:black; transform: rotate(45deg); display: hidden;">
     
-</div>
+</div> -->
 
-     <!-- <div class="containerdis text-center">
+     <div class="containerdis text-center">
             <div class="row">
                 <div class="col md-4">
                     <img src="/frontend/assets/gallery8.jpg" alt="" class="img-fluid" width="50%">
@@ -110,9 +110,9 @@
                          <button type="button" class="btn btn-primary">Understood</button> 
                     </div>
                 </div>
-            </div>`
+            </div>
         
-    </div>  -->
+    </div> 
 
 
     @endsection

@@ -99,7 +99,6 @@
                             <p>Make Payment From Wallet<br><br>
                                 <form method="post" action="{{url('checkout')}}">
                                     @csrf
-                                    <input type="text" name="tickdetails" id="paymenttype" value="">
                                     <input type="hidden" name="paymenttype" id="paymenttype" value="wallet">
                                     <input type="hidden" name="totalpay" id="totalpay" class="totalpay">
                                     <button type="submit" class="btn btn-dark" style="background-color:#E223E2;">Complete Purchase</button>

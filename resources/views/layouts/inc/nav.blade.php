@@ -39,9 +39,6 @@
                             <a class="dropdown-item" href="/profile/{{session('user_id')}}">
                                 {{ __('View Profile') }}
                             </a>
-                            <a class="dropdown-item" href="logout">
-                                {{ __('My Wallet') }}
-                            </a>
                             <a class="dropdown-item" href="{{url('logout')}}">
                                 {{ __('Logout') }}
                             </a>

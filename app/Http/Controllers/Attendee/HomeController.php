@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Session;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use App\Models\PurchasesModel;
 use App\Models\PurchasesdetailsModel;
+use App\Models\User;
 
 
 class HomeController extends Controller
@@ -220,9 +221,20 @@ class HomeController extends Controller
         }
     }
 
-    public function profilePage(Attendee $attendee)
+    public function profilePage()
     {
-        return view('Attendee.attendeeprofile')->with(['attendee' => $attendee]);
+        $follows=new FollowModel();
+        $artists=new Artists();
+        $user=session('user_id');
+        $data['follows']=$artists->where('artists.is_deleted',0)->join('followers', 'artists.artist_id', '=', 'followers.following')->where('followers.follower',$user)->where('followers.is_deleted',0)->paginate(10);
+
+        $userid=session('user_id');
+        $tickets=new TicketModel();
+        $attendeewallet=new AttendeeWallet();
+        $data['attendee']=Attendee::find($userid);
+        $data['wallet']=$attendeewallet->where('user_id', $userid)->get();
+        $data['tickets']=$tickets->where('buyer',$userid)->join('ticket_types', 'tickets.ticket_type', '=', 'ticket_types.tickettype_id')->join('tbl_event', 'tickets.event_id', '=', 'tbl_event.event_id')->paginate(10);
+        return view('Attendee.attendeeprofile', compact('data'));
     }
 
 }

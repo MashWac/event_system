@@ -23,6 +23,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
 Route::get('attendee', [HomeController::class,'index']);
 Route::get('events', [HomeController::class,'events']);
 Route::get('artists', [HomeController::class,'artists']);
@@ -32,6 +33,8 @@ Route::get('followartist/{id}', [HomeController::class,'followartist']);
 Route::get('buytickets/{id}', [HomeController::class,'buytickets']);
 Route::post('cart', [HomeController::class,'updatecart']);
 Route::post('checkout', [HomeController::class,'checkout']);
+Route::get('/profile/{attendee}', [HomeController::class, 'profilePage']);
+
 
 
 
@@ -52,6 +55,7 @@ Route::get('deleteevent/{id}', [EventOrganiserController::class,'deleteevent']);
 Route::get('viewevent/{id}', [EventOrganiserController::class,'viewevent']);
 Route::get('editevent/{id}', [EventOrganiserController::class,'editevent']);
 Route::put('updateevent/{id}', [EventOrganiserController::class,'updateevent']);
+Route::get('organiserprofile', [EventOrganiserController::class, 'organiserprofile']);
 
 
 
@@ -64,9 +68,11 @@ Route::post('payartist', [EventOrganiserController::class,'payartist']);
 Route::post('reguser', [Registration::class,'storeuser']);
 Route::post('signin', [Registration::class,'signin']);
 Route::get('logout', [Registration::class,'logout']);
+Route::get('landing', [Registration::class,'landing']);
 
 
 
+Route::get('myartistpage', [ArtistHomeController::class, 'myartistprofile']);
 Route::get('artisthome', [ArtistHomeController::class,'index']);
 Route::get('contenthome', [ArtistHomeController::class,'content']);
 Route::get('eventbookings', [ArtistHomeController::class,'bookings']);
@@ -80,7 +86,7 @@ Route::get('rejectoffer/{id}', [ArtistHomeController::class,'rejectoffer']);
 
 
 
-Route::get('/profile/{attendee}', [HomeController::class, 'profilePage']);
+
 
 
 Auth::routes();
