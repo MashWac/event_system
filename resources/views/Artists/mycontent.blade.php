@@ -17,15 +17,13 @@
 <section class="py-2">
     <header class="header"><h3>UPLOAD CONTENT</h3></header>
     <div class="outside-container">
-        <div class="container">
+        <div class="container" style="height: fit-content;">
+        <div class="text-center uploadarea" onclick="showDiv()">
             <header>Please Upload Content below</header>
-            <form action="#">
-              <label>
-                <input type="file" id="default-btn" name="myfile" style="display:none">
-                <i class="fas fa-cloud-upload-alt"></i>
-                <p>Browse file to Upload</p>
-              </label>
-             </form>
+            <input type="file" id="default-btn" name="myfile" style="display:none">
+                <i style="font-size:100px; padding-bottom:30px" class="fas fa-cloud-upload-alt"></i>
+                <p style="font-size:40px; padding-bottom:30px">Browse file to Upload</p>
+        </div>
         </div>
     </div>
 </section>
@@ -156,6 +154,32 @@ const defaultBtn = document.querySelector('#default-')
     <a href="albumsdisplay"><button class="button-video">See more ...</button></a>
   </div>
 </section>
+<div class="bg-modal text-center" style="display:none; width:100%;" id="bbbg">
+            <div class="modal-content text-center" style="background-image: linear-gradient(to bottom right,#c286ed, #ef9dd5);">
+            <header class="header2" style="margin-top:5%;"><h3>Upload Content</h3></header>
+                <div class="card mb-3 text-center" style="max-width: 40%; margin-top:3%; padding-bottom:8%; margin-left:30%;">
+                <form action="{{url('uploadcontent')}}" method="POST" enctype="multipart/form-data">
+                    @csrf 
+                    <div class="col-md-6" style="margin-left:30%;">
+                    <label for="contenttype">Select Content Type:</label>
+                      <select id="contenttype" class="form-control" name="contenttype">
+                        <option value="1">Albums</option>
+                        <option value="videos">Videos</option>
+                      </select>
+                    </div>
+                    <div class="col-md-6"  style="margin-left:30%;">
+                      <label for="contenttype">Select File:</label>
+                      <input type='file' class="form-control" id="contentfile" name="contentfile">
+                    </div>
+                     <div class="col-md-12"  style="margin-top:5%;" >
+                    <button type="submit" class="btn btn-dark" onclick="">Upload Content</button>
+                    </div>
+                </form>
+                
+                </div>
+                <div class="close" onclick="closingdiv()">+</div>
+            </div>       
+        </div>
 
 
 @endsection

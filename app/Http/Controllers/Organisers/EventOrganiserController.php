@@ -301,13 +301,50 @@ class EventOrganiserController extends Controller
         $payment_artist->payer_id=$request->input('organiserid');
         $payment_artist->recepient_id=$request->input('artist_id');
         $payment_artist->event_id=$request->input('event_id');
-        $payment_artist->paylists=$request->input('organiserid');
+        $payment_artist->payment_method=1;
 
         $payment_artist->save();
+        $art=$request->input('artist_id');
+        $artist=$artist_wallet->where('artist_id',$art)->get();
+        foreach($artist as $item){
+            $id=$item['artistswallet_id'];
+        }
+        $organiser=$organiser_wallet->where('organiser_id',session('user_id'))->get();
+        foreach($organiser as $item){
+            $id=$item['organiserwallet_id'];
+        }
 
-        $artist_wallet->artist_id=$request->input('artist_id');
-        $artist_wallet->save();
+        $organiser=OrganiserWallet::find($id);
+        $orgamount=$organiser->amount_available;
+        $artist=ArtistWallet::find($id);
+        $artamount=$artist->amount;
+        $newamount=$request->input('paymentamount');
+        $valuenew=intval($artamount)+intval($newamount);
+        $reducedamout=intval($orgamount)-intval($newamount);
+        if($request->input('paylists')==2){
+            if($orgamount<$newamount){
+                return redirect()->back()->with('status','Amount Not Updated. Insufficient Funds');
+            }else{
+                $artist->amount=$valuenew;
+                $artist->updated_at=Carbon::now();
+                $organiser->amount_available=$reducedamout;
+                $organiser->updated_at=Carbon::now();
+                $artist->update();
+                $organiser->update();
+                return redirect()->back()->with('status','Amount Updated');
+            }
 
+        }else{
+            $artist->amount=$valuenew;
+            $artist->updated_at=Carbon::now();
+            $organiser->amount_available=$reducedamout;
+            $organiser->updated_at=Carbon::now();
+            $artist->update();
+            $organiser->update();
+            return redirect()->back()->with('status','Amount Updated');
+        }
+
+        
     }
     public function sendrequest(Request $request){
         $booking=new BookingsModel();
@@ -345,6 +382,39 @@ class EventOrganiserController extends Controller
         $data['organiser']=Organiser::find($userid);
         $data['wallet']=$organiserwallet->where('organiser_id', $userid)->get();
         return view('Organisers.organiserprofile', compact('data'));
+    }
+    public function deposit(Request $request,$id){
+        $wallet=OrganiserWallet::find($id);
+        $amount=$wallet->amount_available;
+        $newamount=$request->input('depositorganiser');
+        $valuenew=intval($amount)+intval($newamount);
+        $wallet->amount_available=$valuenew;
+        $wallet->updated_at=Carbon::now();
+        if($wallet->update()){
+            return redirect('/organiserprofile')->with('status','You Have Successfully Deposited');
+        }else{
+            return redirect('/organiserprofile')->with('status','Transaction Unsuccessful');
+
+        }
+    }
+    public function withdraw(Request $request, $id){
+        $wallet=OrganiserWallet::find($id);
+        $amount=$wallet->amount_available;
+        $newamount=$request->input('withdraworganiser');
+        if(intval($amount)<intval($newamount)){
+            return redirect('/organiserprofile')->with('status','Not Enough Money In Your Account');
+
+        }else{
+            $valuenew=intval($amount)-intval($newamount);
+            $wallet->amount_available=$valuenew;
+            $wallet->updated_at=Carbon::now();
+            
+            if($wallet->update()){
+                return redirect('/organiserprofile')->with('status','Withdraw Successful.');
+            }
+        }
+
+
     }
 
 }

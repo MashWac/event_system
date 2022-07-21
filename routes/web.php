@@ -33,7 +33,11 @@ Route::get('followartist/{id}', [HomeController::class,'followartist']);
 Route::get('buytickets/{id}', [HomeController::class,'buytickets']);
 Route::post('cart', [HomeController::class,'updatecart']);
 Route::post('checkout', [HomeController::class,'checkout']);
-Route::get('/profile/{attendee}', [HomeController::class, 'profilePage']);
+Route::get('profile', [HomeController::class, 'profilePage']);
+
+Route::put('depositattendee/{id}', [HomeController::class,'deposit']);
+Route::put('withdrawattendee/{id}', [HomeController::class,'withdraw']);
+
 
 
 
@@ -56,6 +60,9 @@ Route::get('viewevent/{id}', [EventOrganiserController::class,'viewevent']);
 Route::get('editevent/{id}', [EventOrganiserController::class,'editevent']);
 Route::put('updateevent/{id}', [EventOrganiserController::class,'updateevent']);
 Route::get('organiserprofile', [EventOrganiserController::class, 'organiserprofile']);
+
+Route::put('depositorganiser/{id}', [EventOrganiserController::class,'deposit']);
+Route::put('withdraworganiser/{id}', [EventOrganiserController::class,'withdraw']);
 
 
 
@@ -81,6 +88,7 @@ Route::get('albumsdisplay', [ArtistHomeController::class,'display2']);
 Route::get('contentfeedback', [ArtistHomeController::class,'feedback']);
 Route::get('acceptoffer/{id}', [ArtistHomeController::class,'acceptoffer']);
 Route::get('rejectoffer/{id}', [ArtistHomeController::class,'rejectoffer']);
+Route::post('uploadcontent', [ArtistHomeController::class,'uploadcontent']);
 
 
 

@@ -35,3 +35,15 @@ function closediv(){
     document.getElementById("bgg").style.display="none";
 }
 
+function showDiv() {
+    document.getElementById('bbg').style.display = "none";
+}
+
+$(".uploadarea").on("click", function () {
+    document.getElementById('bbbg').style.display = "flex";
+
+    
+});
+function closingdiv(){
+    document.getElementById("bbbg").style.display="none";
+}

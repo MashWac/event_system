@@ -47,13 +47,13 @@
             Current status
         </div>
         <div class="card-body">
-            <h5 class="card-title">Wallet Ballance: {{$item->amount}}</h5>
+            <h5 class="card-title">Wallet Ballance: {{$item->available_amount}}</h5>
             <p class="card-text">Perform Transaction</p>
             <label for="phoneattendetransact">Mpesa Phone Number:</label>
             <input type="number"  name="phoneattendetransact" id="phoneattendetransact" placeholder="Enter Phone" onchange="editphone(this.value)" width="40%">
             <label for="amountattendetransact">Amount Transaction:</label>
             <input type="number"  name="amountattendetransact" id="amountattendetransact" placeholder="Enter Amount" onchange="editamount(this.value)" width="40%">
-            <form action="depositattendee" method="POST" enctype="multipart/form-data" class="py-1">
+            <form action="{{url('depositattendee/'.$item->wallet_id)}}" method="POST" enctype="multipart/form-data" class="py-1">
                 @csrf 
                 @method('PUT')
                 <div class="row wallattend">
@@ -66,7 +66,7 @@
                     </div>
                 </div>
             </form>
-            <form action="withdrawattendee" method="POST" enctype="multipart/form-data">
+            <form action="{{url('withdrawattendee/'.$item->wallet_id)}}" method="POST" enctype="multipart/form-data">
                 @csrf 
                 @method('PUT')
                 <div class="row">

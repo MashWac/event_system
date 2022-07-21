@@ -150,7 +150,7 @@
             <input type="number"  name="phoneorganisertransact" id="phoneorganisertransact" placeholder="Enter Phone" onchange="editorgphone(this.value)" width="40%">
             <label for="amountorganisertransact">Amount Transaction:</label>
             <input type="number"  name="amountorganisertransact" id="amountorganisertransact" placeholder="Enter Amount" onchange="editorgamount(this.value)" width="40%">
-            <form action="depositorganiser" method="POST" enctype="multipart/form-data" class="py-1">
+            <form action="{{url('depositorganiser/'.$item->organiserwallet_id)}}" method="POST" enctype="multipart/form-data" class="py-1">
                 @csrf 
                 @method('PUT')
                 <div class="row wallattend">
@@ -163,7 +163,7 @@
                     </div>
                 </div>
             </form>
-            <form action="withdraworganiser" method="POST" enctype="multipart/form-data">
+            <form action="{{url('withdraworganiser/'.$item->organiserwallet_id)}}" method="POST" enctype="multipart/form-data">
                 @csrf 
                 @method('PUT')
                 <div class="row">

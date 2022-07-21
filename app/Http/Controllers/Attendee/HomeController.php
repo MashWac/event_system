@@ -22,6 +22,9 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use App\Models\PurchasesModel;
 use App\Models\PurchasesdetailsModel;
 use App\Models\User;
+use App\Models\Videos;
+use App\Models\Albums;
+use App\Models\OrganiserWallet;
 
 
 class HomeController extends Controller
@@ -136,8 +139,13 @@ class HomeController extends Controller
     }
     public function artistpage($id)
     {
+        $videos=new Videos();
         $artists= new Artists;
+        $albums=new Albums();
         $data['artist']=Artists::find($id);
+        $data['videos']=$videos->join('content', 'videos.content_id', '=', 'content.content_id')->where('content.artist',$id)->get();
+        $data['albums']=$albums->join('content', 'albums.content_id', '=', 'content.content_id')->where('content.artist',$id)->get();
+
         return view('Attendee.artistprofile',compact('data'));
     }
     public function refunds()
@@ -149,6 +157,8 @@ class HomeController extends Controller
         $tickettypes=new TickettypeModel;
         $purchase=new PurchasesModel;
         $purchasedetails= new PurchasesdetailsModel;
+        $attwallet=new AttendeeWallet();
+        $orgwallet=new OrganiserWallet();
         $method=$request->input('paymenttype');
         $eventid=session('event');
 
@@ -174,6 +184,7 @@ class HomeController extends Controller
                 $purchase->organiser_id= $event->event_creator;
                 $purchase->updated_at=Carbon::now();
 
+                $f=$event->event_creator;
                 $purchase->save();
                 $m=$purchase->order_id;
                 foreach ($items as &$item) {
@@ -217,6 +228,104 @@ class HomeController extends Controller
                 return redirect('attendee')->with('status','Your purchase is successful');
             }
         }else{
+            $items = Session::get('tickets', []);
+                $x=1;
+                $total=0;
+                foreach ($items as &$item) {
+                    $total+=$item['subtotal'];
+                }
+
+                $event= EventModel::find($eventid);
+
+               
+                $purchase->order_amount=$total;
+                $purchase->event_id=session('event');
+                $purchase->payment_method=1;
+                $purchase->buyer_id=session('user_id');
+                $purchase->organiser_id= $event->event_creator;
+                $purchase->updated_at=Carbon::now();
+
+                $f=$event->event_creator;
+                $attendeewallet=$attwallet->where('user_id',session('user_id'))->get();
+                foreach($attendeewallet as $item){
+                    $newid=$item['wallet_id'];
+                }
+                $orgwallet=$orgwallet->where('organiser_id',$event->event_creator)->get();
+
+                foreach($orgwallet as $item){
+                    $id=$item['organiserwallet_id'];
+                }
+                $orgwallet=OrganiserWallet::find($id);
+                $attendeewallet=AttendeeWallet::find($newid);
+                $orgamount=$orgwallet->amount_available;
+                $attamount=$attendeewallet->available_amount;
+                $newamount=$total;
+                $valuenew=intval($attamount)+intval($newamount);
+                $reducedamout=intval($orgamount)-intval($newamount);
+                if($orgamount<$newamount){
+                    return redirect()->back()->with('status','Amount Not Updated. Insufficient Funds');
+                }else{
+                    $attendeewallet->available_amount=$valuenew;
+                    $attendeewallet->updated_at=Carbon::now();
+                    $orgwallet->amount_available=$reducedamout;
+                    $orgwallet->updated_at=Carbon::now();
+                    $attendeewallet->update();
+                    $orgwallet->update();
+                    $purchase->save();
+                    $m=$purchase->order_id;
+                foreach ($items as &$item) {
+                    $tickid=$item['ticket_id'];
+                    $stock=intval($item['stock']);
+                    $reducedquan=intval($item['quantity']);
+                    if(TickettypeModel::find($tickid)){
+                        $edtick=TickettypeModel::find($tickid);
+                        $edtick->ticket_quantity=500;
+                        $edtick->update();
+                        $count=intval($item['quantity']);
+                   
+                        $datapu=['ticket_id'=>$tickid,
+                            'purchase_id'=>$m,
+                            'quantity'=>$reducedquan,
+                            'updated_at'=>Carbon::now()];
+                        $purchasedetails->insert($datapu);
+                        
+                        while($x<=$count){
+                           
+                            $filename= time();
+                            $filename=intval($filename);
+                            $filename=$filename+$x;
+                            $data=['ticket_number'=>$filename,
+                            'event_id'=>session('event'),
+                            'purchase_date'=>Carbon::now(),
+                            'buyer'=>session('user_id'),
+                            'qr_id'=>$x.$filename.'.sgv',
+                            'ticket_type'=>$tickid,
+                            'updated_at'=>Carbon::now()];
+                            QrCode::generate($filename, 'assets/uploads/tickets/'.$filename.'.svg');
+    
+                            $tickets->insert($data);
+                            $x++;
+                        }
+
+                    }else{
+                        echo($tickid);
+
+
+                    }
+    
+                }
+                
+                $request->session()->forget('tickets');
+                $request->session()->forget('event');
+                session(['purchase'=>false]);
+                
+                return redirect('attendee')->with('status','Your purchase is successful');
+
+                }
+
+
+
+
             
         }
     }
@@ -235,6 +344,36 @@ class HomeController extends Controller
         $data['wallet']=$attendeewallet->where('user_id', $userid)->get();
         $data['tickets']=$tickets->where('buyer',$userid)->join('ticket_types', 'tickets.ticket_type', '=', 'ticket_types.tickettype_id')->join('tbl_event', 'tickets.event_id', '=', 'tbl_event.event_id')->paginate(10);
         return view('Attendee.attendeeprofile', compact('data'));
+    }
+    public function deposit(Request $request,$id){
+        $wallet=AttendeeWallet::find($id);
+        $amount=$wallet->available_amount;
+        $newamount=$request->input('depositattendee');
+        $valuenew=intval($amount)+intval($newamount);
+        $wallet->available_amount=$valuenew;
+        $wallet->updated_at=Carbon::now();
+        $wallet->update();
+
+        return redirect('profile')->with('status','You Have Successfully Deposited');
+    }
+    public function withdraw(Request $request, $id){
+        $wallet=AttendeeWallet::find($id);
+        $amount=$wallet->available_amount;
+        $newamount=$request->input('withdrawattendee');
+        if(intval($amount)<intval($newamount)){
+            return redirect('profile')->with('status','Not Enough Money In Your Account');
+
+        }else{
+            $valuenew=intval($amount)-intval($newamount);
+            $wallet->available_amount=$valuenew;
+            $wallet->updated_at=Carbon::now();
+            
+            if($wallet->update()){
+            return redirect('profile')->with('status','Withdraw Successful.');
+            }
+        }
+
+
     }
 
 }
