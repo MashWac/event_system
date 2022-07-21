@@ -5,7 +5,7 @@ use App\Http\Controllers\Attendee\HomeController;
 use App\Http\Controllers\Organisers\EventOrganiserController;
 use App\Http\Controllers\Authentication\Registration;
 use App\Http\Controllers\Artist\ArtistHomeController;
-
+use App\Http\Controllers\EventController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -41,10 +41,6 @@ Route::put('withdrawattendee/{id}', [HomeController::class,'withdraw']);
 
 
 
-
-
-
-
 Route::get('organisers', [EventOrganiserController::class,'index']);
 Route::get('createevent', [EventOrganiserController::class,'createevent']);
 Route::get('activeevents', [EventOrganiserController::class,'activeevents']);
@@ -63,6 +59,7 @@ Route::get('organiserprofile', [EventOrganiserController::class, 'organiserprofi
 
 Route::put('depositorganiser/{id}', [EventOrganiserController::class,'deposit']);
 Route::put('withdraworganiser/{id}', [EventOrganiserController::class,'withdraw']);
+Route::get('/search', [EventController::class, 'search']);
 
 
 
