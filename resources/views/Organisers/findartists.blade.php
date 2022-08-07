@@ -89,9 +89,9 @@
             <form action="sendrequest" method="POST" enctype="multipart/form-data">
                 @csrf 
                 <div class="col-md-6">
-                    <label for="sendeventreq">Select Event:</label>
-                    <input type="text" class="form-control"name="sendeventreq" id="event-listings" list="eventselect">
-                        <datalist id="eventselect">
+                    <label for="eventsele">Select Event:</label>
+                    <input type="text" class="form-control"name="eventsele" id="event-ls" list="eventslect">
+                        <datalist id="eventslect">
                             @foreach($data['events'] as $item)
                             <option value="<?=$item['event_id']?>"><?="Event-".$item['event_name']?><option>
                             @endforeach

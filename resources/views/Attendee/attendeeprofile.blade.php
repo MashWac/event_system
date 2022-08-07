@@ -117,7 +117,7 @@
                         <td>{{$item->ticket_type}}</td>
 
                         <td>
-                            <a href="">
+                            <a href="{{url('ticketpage/'.$item->ticket_id)}}">
                                 <button type="button" class="btn btn-dark">Download</button>
                             </a>
                         </td>
@@ -125,6 +125,8 @@
                 @endforeach
                 </tbody>
             </table>
+            {{ $data['tickets']->links() }}
+
     </div>
 </div>
 <div class="card py-1">

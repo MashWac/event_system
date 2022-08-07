@@ -25,6 +25,8 @@ use App\Models\User;
 use App\Models\Videos;
 use App\Models\Albums;
 use App\Models\OrganiserWallet;
+use PDF;
+
 
 
 class HomeController extends Controller
@@ -265,9 +267,9 @@ class HomeController extends Controller
                 if($orgamount<$newamount){
                     return redirect()->back()->with('status','Amount Not Updated. Insufficient Funds');
                 }else{
-                    $attendeewallet->available_amount=$valuenew;
+                    $attendeewallet->available_amount=$reducedamout;
                     $attendeewallet->updated_at=Carbon::now();
-                    $orgwallet->amount_available=$reducedamout;
+                    $orgwallet->amount_available=$valuenew;
                     $orgwallet->updated_at=Carbon::now();
                     $attendeewallet->update();
                     $orgwallet->update();
@@ -298,12 +300,12 @@ class HomeController extends Controller
                             'event_id'=>session('event'),
                             'purchase_date'=>Carbon::now(),
                             'buyer'=>session('user_id'),
-                            'qr_id'=>$x.$filename.'.sgv',
+                            'qr_id'=>$x.$filename.'.svg',
                             'ticket_type'=>$tickid,
                             'updated_at'=>Carbon::now()];
                             QrCode::generate($filename, 'assets/uploads/tickets/'.$filename.'.svg');
     
-                            $tickets->insert($data);
+                            $tickets->save($data);
                             $x++;
                         }
 
@@ -373,6 +375,24 @@ class HomeController extends Controller
             }
         }
 
+
+    }
+    public function downloadtickets($id){
+        $tickets=new TicketModel();
+        $userid=session('user_id');
+
+        $data['tickets'] =$data['tickets']=$tickets->where('buyer',$userid)->join('ticket_types', 'tickets.ticket_type', '=', 'ticket_types.tickettype_id')->join('tbl_event', 'tickets.event_id', '=', 'tbl_event.event_id')->where('tickets.ticket_id',$id)->paginate(10);
+        ;
+        $pdf = PDF::loadView('Attendee.ticket', compact('data'));
+  
+        return $pdf->download('ticket.pdf');
+    }
+    public function ticketpage($id){
+        $tickets=new TicketModel();
+        $userid=session('user_id');
+
+        $data['tickets'] =$data['tickets']=$tickets->where('tickets.ticket_id',$id)->where('buyer',$userid)->join('ticket_types', 'tickets.ticket_type', '=', 'ticket_types.tickettype_id')->join('tbl_event', 'tickets.event_id', '=', 'tbl_event.event_id')->get();
+        return view('Attendee.ticket', compact('data'));
 
     }
 

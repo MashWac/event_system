@@ -9,29 +9,5 @@
 </div>
 @endforeach
 
-<div class="albums-single">
-    <img src="/frontend/assets/album2.jpg" alt="" width="100%">
-</div>
-<div class="albums-single">
-    <img src="/frontend/assets/album3.jpg" alt="" width="100%">
-</div>
-<div class="albums-single">
-    <img src="/frontend/assets/album4.webp" alt="" width="100%">
-</div>
-<div class="albums-single">
-    <img src="/frontend/assets/album4.webp" alt="" width="100%">
-</div>
-<div class="albums-single">
-    <img src="/frontend/assets/album4.webp" alt="" width="100%">
-</div>
-<div class="albums-single">
-    <img src="/frontend/assets/album4.webp" alt="" width="100%">
-</div>
-<div class="albums-single">
-    <img src="/frontend/assets/album4.webp" alt="" width="100%">
-</div>
-<div class="albums-single">
-    <img src="/frontend/assets/album4.webp" alt="" width="100%">
-</div>
 
 @endsection

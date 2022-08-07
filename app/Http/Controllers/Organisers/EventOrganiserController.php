@@ -48,14 +48,51 @@ class EventOrganiserController extends Controller
         $alltimes=[];
         $current=0;
         $wow=[];
-        foreach(compact($data['totalticketsold']) as $item){
+        $genders=['male','female'];
+        $gendercount=[$data['gendermaledemographics'],$data['genderfemaledemographics']];
+        $x=0;
+        foreach($data['totalticketsold'] as $item){
             $timecreate=$item['created_data'];
             $thecount=$item['count'];
             array_push($datachecked,array($timecreate=>$thecount));
         }
+        foreach ($datachecked as $item){
+            foreach($item as $key=>$value){
+                array_push($newdatedata,$key);
+                array_push($times,$value);
+            }
+        }
+        foreach($newdatedata as $key=>$value){
+            $currentkey=$key;
+            $keyplus=$current+1;
+            $keyminus=$current-1;
+            if($newdatedata[$currentkey]==$newdatedata[$keyplus]){
+                //$x=$wow[$value];
+                $x=$x+intval($times[$currentkey]);
+                $wow[$value]=$x;
+            }
+            else{
+                foreach($wow as $item=>$pair){
+                    if($item==$value){
+                        $x=$pair;
+                        $x=$x+intval($times[$currentkey]);
+                        $wow[$value]=$x;
+                    }else{
+                        $wow[$value]=intval($times[$currentkey]);
 
-        print_r($datachecked);
+                    }
 
+                }
+
+            }
+            $currentkey++;
+
+        }
+        foreach($wow as $key=>$value){
+            array_push($alltimes,$key);
+            array_push($timings,$value);
+        }
+        return view('Organisers.index',['dates'=>$alltimes,'tickets'=>$timings,'genders'=>$genders,'gendercount'=>$gendercount,'soldtickets'=>$data['totalsales']]);
 
     }
     public function createevent(){
@@ -254,6 +291,7 @@ class EventOrganiserController extends Controller
 
     }
     public function viewevent($id){
+        $tickets=new TicketModel();
         $data['viewevent']=EventModel::find($id);
         $paymeths= new PaymentMethodsModel();
         $data['paymethods']=$paymeths->all();
@@ -261,7 +299,69 @@ class EventOrganiserController extends Controller
         $performances=new PerformanceModel();
         $data['performance']=$performances->where('event_performances.is_deleted',0)->where('event_performances.event_id',$id)->join('tbl_event', 'event_performances.event_id', '=', 'tbl_event.event_id')->join('artists', 'event_performances.performer_id', '=', 'artists.artist_id')->join('bookings', 'event_performances.accepted_booking', '=', 'bookings.booking_id')->get();
         $data['payout']=$payouts->join('event_performances', 'artist_payment.event_id', '=', 'event_performances.event_id')->groupBy('artist_payment.recepient_id')->sum('amount');
-        return view('Organisers.viewevent',compact('data'));
+
+        $user=session('user_id');
+        $data['totalticketsold']=$tickets->join('ticket_types', 'tickets.ticket_type', '=', 'ticket_types.tickettype_id')->join('tbl_event', 'tickets.event_id', '=', 'tbl_event.event_id')->where('tbl_event.event_creator',$user)->where('tbl_event.event_id',$id)->selectRaw("COUNT(*) as count, DATE_FORMAT(tickets.created_at, '%Y %m %e') as created_data")
+        ->whereBetween('tickets.created_at', [Carbon::createFromDate(2020,3,4), Carbon::now()])
+        ->groupBy('tickets.created_at')
+        ->get();
+
+        $data['gendermaledemographics']=$tickets->join('ticket_types', 'tickets.ticket_type', '=', 'ticket_types.tickettype_id')->join('tbl_event', 'tickets.event_id', '=', 'tbl_event.event_id')->where('tbl_event.event_creator',$user)->where('tbl_event.event_id',$id)->join('users', 'users.user_id', '=', 'tickets.buyer')->where('users.gender','male')->count();
+        $data['genderfemaledemographics']=$tickets->join('ticket_types', 'tickets.ticket_type', '=', 'ticket_types.tickettype_id')->join('tbl_event', 'tickets.event_id', '=', 'tbl_event.event_id')->where('tbl_event.event_creator',$user)->where('tbl_event.event_id',$id)->join('users', 'users.user_id', '=', 'tickets.buyer')->where('users.gender','female')->count();
+        $data['genders']=['males'=>$data['gendermaledemographics'], 'females'=>$data['genderfemaledemographics']];
+        $data['totalsales']=$tickets->join('ticket_types', 'tickets.ticket_type', '=', 'ticket_types.tickettype_id')->join('tbl_event', 'tickets.event_id', '=', 'tbl_event.event_id')->where('tbl_event.event_creator',$user)->where('tbl_event.event_id',$id)->count();
+        $newdatedata=[];
+        $datachecked=[];
+        $timings=[];
+        $times=[];
+        $alltimes=[];
+        $current=0;
+        $wow=[];
+        $genders=['male','female'];
+        $gendercount=[$data['gendermaledemographics'],$data['genderfemaledemographics']];
+        $x=0;
+        foreach($data['totalticketsold'] as $item){
+            $timecreate=$item['created_data'];
+            $thecount=$item['count'];
+            array_push($datachecked,array($timecreate=>$thecount));
+        }
+        foreach ($datachecked as $item){
+            foreach($item as $key=>$value){
+                array_push($newdatedata,$key);
+                array_push($times,$value);
+            }
+        }
+        foreach($newdatedata as $key=>$value){
+            $currentkey=$key;
+            $keyplus=$current+1;
+            $keyminus=$current-1;
+            if($newdatedata[$currentkey]==$newdatedata[$keyplus]){
+                //$x=$wow[$value];
+                $x=$x+intval($times[$currentkey]);
+                $wow[$value]=$x;
+            }
+            else{
+                foreach($wow as $item=>$pair){
+                    if($item==$value){
+                        $x=$pair;
+                        $x=$x+intval($times[$currentkey]);
+                        $wow[$value]=$x;
+                    }else{
+                        $wow[$value]=intval($times[$currentkey]);
+
+                    }
+
+                }
+
+            }
+            $currentkey++;
+
+        }
+        foreach($wow as $key=>$value){
+            array_push($alltimes,$key);
+            array_push($timings,$value);
+        }
+        return view('Organisers.viewevent',compact('data'),['dates'=>$alltimes,'tickets'=>$timings,'genders'=>$genders,'gendercount'=>$gendercount,'soldtickets'=>$data['totalsales']]);
     }
     public function editevent($id){
         $data['event']=EventModel::find($id);
@@ -348,7 +448,7 @@ class EventOrganiserController extends Controller
     }
     public function sendrequest(Request $request){
         $booking=new BookingsModel();
-        $booking->event_id=$request->input('sendeventreq');
+        $booking->event_id=$request->input('eventsele');
         $booking->artist_id=$request->input('artistsend');
         $booking->organiser_id=session('user_id');
         $booking->pay_offer=$request->input('paymentoffer');

@@ -36,10 +36,8 @@ function closediv(){
 }
 
 function editartphone(val) {
-    document.getElementById('phonedartist').value= val;
     document.getElementById('phonewartist').value= val;
 
 }
 function editartamount(val) {
-    document.getElementById('depositartist').value= val;
     document.getElementById('withdrawartist').value= val;}

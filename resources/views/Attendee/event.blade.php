@@ -54,7 +54,7 @@
         </div>
         <div class="card-body">
             <div class="row py-3 px-5">
-            @foreach($result as $item)
+            @foreach($data['events'] as $item)
                 <div class="col-sm-4 py-1">
                     <div class="card">
                         <input type="text" id="eventflyer" value="asset('/assets/uploads/events/'.$item->event_flyer)" hidden >
@@ -140,7 +140,7 @@
         </div>
         <div class="card-body">
             <div class="row py-3 px-5">
-                @foreach($result as $item)
+                @foreach($data['eventmob'] as $item)
                 <div class="col-sm-4 py-1">
                     <div class="card">
                     <img src="{{asset('/assets/uploads/events/'.$item->event_flyer) }}" height="390px" class="card-img-top" alt="care">
@@ -169,7 +169,9 @@
                
             </div>
             <div class="text-center d-flex justify-content-center">
-                    Some
+            {{ $data['eventmob']->links() }}
+
+
             </div>
         </div>
     </div>

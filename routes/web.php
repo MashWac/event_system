@@ -38,6 +38,9 @@ Route::get('profile', [HomeController::class, 'profilePage']);
 Route::put('depositattendee/{id}', [HomeController::class,'deposit']);
 Route::put('withdrawattendee/{id}', [HomeController::class,'withdraw']);
 
+Route::get('downloadtickets/{id}', [HomeController::class, 'downloadtickets']);
+Route::get('ticketpage/{id}', [HomeController::class, 'ticketpage']);
+
 
 
 
@@ -86,6 +89,10 @@ Route::get('contentfeedback', [ArtistHomeController::class,'feedback']);
 Route::get('acceptoffer/{id}', [ArtistHomeController::class,'acceptoffer']);
 Route::get('rejectoffer/{id}', [ArtistHomeController::class,'rejectoffer']);
 Route::post('uploadcontent', [ArtistHomeController::class,'uploadcontent']);
+Route::put('withdrawartist/{id}', [ArtistHomeController::class,'withdraw']);
+
+
+
 
 
 

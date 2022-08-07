@@ -71,26 +71,13 @@
             <label for="phoneattendetransact">Mpesa Phone Number:</label>
             <input type="number"  name="phoneattendetransact" id="phoneattendetransact" placeholder="Enter Phone" onchange="editartphone(this.value)" width="40%">
             <label for="amountattendetransact">Amount Transaction:</label>
-            <input type="number"  name="amountattendetransact" id="amountattendetransact" placeholder="Enter Amount" onchange="editartamount(this.value)" width="40%">
-            <form action="depositartist" method="POST" enctype="multipart/form-data" class="py-1">
-                @csrf 
-                @method('PUT')
-                <div class="row wallattend">
-                    <div class="col-md-6">
-                        <input type="text" class="form-control" name="depositartist" id="depositartist" hidden>
-                        <input type="text" class="form-control" name="phonedartist" id="phonedartist" hidden>
-                    </div>
-                    <div class="col-md-12">
-                    <button type="submit" class="btn btn-dark" style="background-color:#E223E2;">Deposit</button>
-                    </div>
-                </div>
-            </form>
-            <form action="withdrawartist" method="POST" enctype="multipart/form-data">
+            <input type="number"  name="amountattendetransact" id="amountartusttransact" placeholder="Enter Amount" onchange="editartamount(this.value)" width="40%">
+            <form action="{{url('withdrawartist/'.$item->artistswallet_id)}}" method="POST" enctype="multipart/form-data">
                 @csrf 
                 @method('PUT')
                 <div class="row">
                     <div class="col-md-6">
-                        <input type="text" class="form-control" name="withdrawartist" id="withdrawartist" hidden >
+                        <input type="text" class="form-control" name="withdrawartist" id="withdrawartist" value="" hidden >
                         <input type="text" class="form-control" name="phonewartist" id="phonewartist"hidden >
                     </div>
                     <div class="col-md-12">

@@ -11,7 +11,9 @@ class EventController extends Controller
     public function search(Request $request)
     {
         $input = $request['searchitem'];
-        $result = EventModel::where('event_name', 'LIKE', '%' . $input . '%')
+        $data['events'] = EventModel::where('event_name', 'LIKE', '%' . $input . '%')
+            ->orWhere('location', 'LIKE', '%' . $input . '%')->get();
+        $data['eventmob'] = EventModel::where('event_name', 'LIKE', '%' . $input . '%')
             ->orWhere('location', 'LIKE', '%' . $input . '%')->get();
 
         $creator = Organiser::where('name', 'LIKE', '%' . $input . '%')->first();
@@ -19,7 +21,7 @@ class EventController extends Controller
             $result = EventModel::where('event_creator', $creator->organiser_id)->get();
             return view('Attendee.event')->with(['result' => $result]);            
         }
-            return view('Attendee.event')->with(['result' => $result]);
+            return view('Attendee.event',compact('data'));
     }
 }
 // where('event_name', 'LIKE', '%' . $input . '%')

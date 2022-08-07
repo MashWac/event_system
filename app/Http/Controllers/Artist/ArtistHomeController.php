@@ -169,7 +169,7 @@ class ArtistHomeController extends Controller
     public function withdraw(Request $request, $id){
         $wallet=ArtistWallet::find($id);
         $amount=$wallet->amount;
-        $newamount=$request->input('withdrawattendee');
+        $newamount=$request->input('withdrawartist');
         if(intval($amount)<intval($newamount)){
             return redirect('myartistpage')->with('status','Not Enough Money In Your Account');
 
