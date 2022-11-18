@@ -28,3 +28,12 @@
 function closeDiv() {
     document.getElementById('bgg').style.display = "none";
  }
+function editphone(val) {
+    document.getElementById('phonedattendee').value= val;
+    document.getElementById('phonewattendee').value= val;
+
+}
+function editamount(val) {
+    document.getElementById('depositattendee').value= val;
+    document.getElementById('withdrawattendee').value= val;}
+

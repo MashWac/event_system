@@ -12,7 +12,7 @@
         </div>
         <ul class="nav">
           <li class="navorg {{ \Illuminate\Support\Facades\Request::is('organisers') ? 'active' : ''}}">
-            <a href="organisers" style="display: inline-block;">
+            <a href="{{url('organisers')}}" style="display: inline-block;">
               <span class="navlin">
                 <ion-icon class="sidemenicons" name="home"></ion-icon>
                 <p class="linknav">Home</p> 
@@ -20,7 +20,7 @@
             </a>
           </li>
           <li class="navorg {{ \Illuminate\Support\Facades\Request::is('createevent') ? 'active' : ''}}">
-            <a href="createevent">
+            <a href="{{url('createevent')}}">
             <span class="navlin">
             <ion-icon class="sidemenicons" name="paper"></ion-icon>
             <p class="linknav">Create Event</p> 
@@ -28,7 +28,7 @@
             </a>
           </li>
           <li class="navorg {{ \Illuminate\Support\Facades\Request::is('activeevents') ? 'active' : ''}}">
-            <a href="activeevents">
+            <a href="{{url('activeevents')}}">
             <span class="navlin">
               <ion-icon class="sidemenicons" name="star"></ion-icon>
               <p class="linknav">Active Events</p> 
@@ -36,7 +36,7 @@
             </a>
           </li>
           <li class="navorg {{ \Illuminate\Support\Facades\Request::is('previousevents') ? 'active' : ''}}">
-            <a href="previousevents">
+            <a href="{{url('previousevents')}}">
               <span class="navlin">
                 <ion-icon class="sidemenicons" name="filing"></ion-icon>
                 <p class="linknav">Previous Events</p> 
@@ -44,7 +44,7 @@
             </a>
           </li>
           <li class="navorg {{ \Illuminate\Support\Facades\Request::is('findartists') ? 'active' : ''}}">
-            <a href="findartists">
+            <a href="{{url('findartists')}}">
               <span class="navlin">
               <ion-icon class="sidemenicons" name="compass"></ion-icon>
               <p class="linknav">Find Artists</p> 
@@ -53,7 +53,7 @@
           </li>
           
           <li class="navorg {{ \Illuminate\Support\Facades\Request::is('acceptedrequests') ? 'active' : ''}}">
-            <a href="acceptedrequests">
+            <a href="{{url('acceptedrequests')}}">
             <span class="navlin">
             <ion-icon class="sidemenicons" name="happy"></ion-icon>
             <p class="linknav">Accepted Requests</p> 
@@ -62,7 +62,7 @@
           </li>
 
           <li class="navorg {{ \Illuminate\Support\Facades\Request::is('deniedrequests') ? 'active' : ''}}">
-            <a href="deniedrequests">
+            <a href="{{url('deniedrequests')}}">
               <span class="navlin">
                 <ion-icon class="sidemenicons" name="close-circle"></ion-icon>
                 <p class="linknav">Denied Requests</p> 

@@ -19,6 +19,7 @@
     <link href="{{ asset('frontend/css/style.css')}}" rel="stylesheet">
 </head>
 <body>
+@include('layouts.inc.authe')
         <main class="py-4">
             <div class="content">
                 @yield('content')

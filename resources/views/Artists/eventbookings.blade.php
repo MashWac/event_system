@@ -2,75 +2,48 @@
 @section('content')
 
 <br>
-<h3 class="eventh3">EVENT BOOKINGS</h3>
+<h3 class="eventh3">EVENT BOOKINGS REQUESTS</h3>
 <section class="items">
-	<div class="item">
-		<img src= "/frontend/assets/event1.jpeg">
-		<p><button class="see-more" onclick="showdiv()">See More....</button></p>
-		<button class="but">Accept</button>
-        <button class="but">Reject</button>
+	@foreach($data['bookings'] as $item)
+	<div class="item details">
+		<img src= "{{asset('/assets/uploads/events/'.$item->event_flyer)}}">
+		<p><button class="btnshowmodal see-more" >See More....</button></p>
+			<input type="text" id="eventnames" value="{{$item->event_name}}" hidden >
+			<input type="text" id="eventlocation" value="{{$item->location}}" hidden >
+			<input type="text" id="eventtime" value=" {{$item->event_date}}" hidden>
+			<input type="text" id="eventdescription" value=" {{$item->event_description}}" hidden>
+			<input type="text" id="organiser" value=" {{$item->name}}" hidden>
+			<input type="text" id="emailorg" value=" {{$item->email}}" hidden>
+			<input type="text" id="phoneor" value=" {{$item->phone}}" hidden>
+			<input type="text" id="salaryrange" value=" {{$item->pay_offer}}" hidden>
+			<input type="text" id="eventflyer" value="assets/uploads/events/{{$item->event_flyer}}" hidden>
+		<a href="{{url('acceptoffer/'.$item->booking_id)}}">	
+			<button class="but">Accept</button>
+		</a>
+		<a href="{{url('rejectoffer/'.$item->booking_id)}}">
+        	<button class="but" style="background-color:red;">Reject</button>
+		</a>
 	</div>
-	<div class="item">
-		<img src= "/frontend/assets/event2.png">
-		<p><button class="see-more" onclick="showdiv()">See More....</button></p>
-		<button class="but">Accept</button>
-        <button class="but">Reject</button>
-	</div>
-	<div class="item">
-		<img src= "/frontend/assets/event3.png">
-        <p><button class="see-more" onclick="showdiv()">See More....</button></p>
-		<button class="but">Accept</button>
-        <button class="but">Reject</button>
-	</div>
-    <div class="item">
-		<img src= "/frontend/assets/event4.jpg">
-        <p><button class="see-more" onclick="showdiv()">See More....</button></p>
-		<button class="but">Accept</button>
-        <button class="but">Reject</button>
-	</div>
-    <div class="item">
-		<img src= "/frontend/assets/event5.jpeg">
-        <p><button class="see-more" onclick="showdiv()">See More....</button></p>
-		<button class="but">Accept</button>
-        <button class="but">Reject</button>
-	</div>
-	<div class="item">
-		<img src= "/frontend/assets/event6.jpg">
-        <p><button class="see-more" onclick="showdiv()">See More....</button></p>
-		<button class="but">Accept</button>
-        <button class="but">Reject</button>
-	</div>
-	<div class="item">
-		<img src= "/frontend/assets/event7.jpg">
-        <p><button class="see-more" onclick="showdiv()">See More....</button></p>
-        <button class="but">Accept</button>
-        <button class="but">Reject</button>
-	</div>
-	<div class="item">
-		<img src= "/frontend/assets/event8.jpg">
-        <p><button class="see-more" onclick="showdiv()">See More....</button></p>
-		<button class="but">Accept</button>
-        <button class="but">Reject</button>
-	</div>
+	@endforeach
 </section>
 
-<div class="bg-modal" id="bg-modal">
+<div class="bg-modal" id="bgg">
 	<div class="content-modal">
-		<div class="card mb-3" style="max-width: 95%; margin-top: 3%; margin-bottom: 3%;">
+		<div class="card mb-3" style="max-width: 95%;">
   			<div class="row g-0">
 				<div class="col-md-4">
-				<img src="/frontend/assets/event7.jpg" class="img-fluid rounded-start" alt="...">
+				<img id="modalimage"src="" class="img-fluid rounded-start" alt="...">
 				</div>
 				<div class="col-md-8">
-					<div class="card-body">
-						<h5 class="card-title">Event request</h5>
+					<div class="card-body" class="details">
+						<h5 class="card-title" id="modalevent" ></h5>
 
-						<p class="card-text">Event Organizer: </p>
-						<p class="card-text">Event venue: </p>
-						<p class="card-text">Date: </p>
-						<p class="card-text">Time: </p>
-						<p class="card-text">Salary range: </p>
-						<p class="card-text">Contact details: </p>
+						<p class="card-text" id="modalorganiser"></p>
+						<p class="card-text" id="modalvenue"></p>
+						<p class="card-text" id="modaldescription"> </p>
+						<p class="card-text" id="modaldate"></p>
+						<p class="card-text" id="modalsalary"></p>
+						<p class="card-text"><span id="modalphone"> </span><span id="modalemail"></span></p>
 						<p class="card-text"><small class="text-muted"></small></p>
 						<button class="event" onclick="showdiv()">Contact</button>
 					</div>

@@ -1,7 +1,7 @@
 @extends('layouts.artists')
 @section('content')
 `
-<!--<section>
+<section>
 	<section id="testimonial">
 		<div class="titletext">
 			<p>CONTENT FEEDBACK</p>

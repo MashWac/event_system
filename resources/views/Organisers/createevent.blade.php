@@ -65,7 +65,7 @@
                             <input type="number" class="form-control" name="advancedprice">
                             <label for="Advancedquan">Number of Advanced Tickets:</label>
                             <input type="number" class="form-control" name="advancedquan">
-                            <input type="text" class="form-control" name="advancedname" value="Advanced" hidden>
+                            <input type="text" class="form-control" name="advancedname" value="Advance" hidden>
                         </div>
                         <div class="col-md-6" id='vip' style="display: none ;">
                             <label for="vipprice">Vip Price:</label>

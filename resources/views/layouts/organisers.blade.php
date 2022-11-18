@@ -93,9 +93,12 @@
     <script src="{{ asset('frontend/js/dropdown.js') }}" defer></script>
     <script src="{{ asset('frontend/js/eventtypecheck.js') }}" defer></script>
     <script src="{{ asset('frontend/js/orgeventmodal.js') }}" defer></script>
+    <script src="{{ asset('frontend/js/payoutform.js') }}" defer></script>
 
     <script src="{{ asset('frontend/js/formdisplay.js') }}" defer></script>
     <script src="{{ asset('frontend/js/modalpopup.js') }}" defer></script>
+    <script src="{{ asset('frontend/js/chartjs.min.js') }}" defer></script>
+    <script src="{{ asset('frontend/js/loadchart.js') }}" defer></script>
     <script src="{{ asset('frontend/js/popper.min.js') }}" ></script>
     <script src="{{ asset('frontend/js/perfect-scrollbar.jquery.min.js')}}" ></script>
     <script src="{{ asset('frontend/js/black-dashboard.min.js') }}" ></script>
@@ -235,6 +238,7 @@
       });
     });
   </script>
+
 
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 

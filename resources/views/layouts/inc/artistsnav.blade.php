@@ -24,13 +24,10 @@
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="logout">
+                            <a class="dropdown-item" href="{{url('myartistpage')}}">
                                 {{ __('View Profile') }}
                             </a>
-                            <a class="dropdown-item" href="logout">
-                                {{ __('My Wallet') }}
-                            </a>
-                            <a class="dropdown-item" href="logout">
+                            <a class="dropdown-item" href="{{url('logout')}}">
                                 {{ __('Logout') }}
                             </a>
                         </div>

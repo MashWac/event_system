@@ -16,6 +16,9 @@ use PHPUnit\Framework\Constraint\IsEmpty;
 
 class Registration extends Controller
 {
+    public function landing(){
+        return view('Landing.index');
+    }
 
     public function storeuser(Request $request){
         $artist=new Artists();
@@ -166,16 +169,17 @@ class Registration extends Controller
             if ($pass == $password) {
 
                 $sessionData = [
-                    'user_id' => $data_artists['kid_id'],
-                    'email' => $data_artists['kid_email'],
-                    'name'  => $data_artists['kid_name'],
+                    'user_id' => $data_artists['artist_id'],
+                    'email' => $data_artists['email'],
+                    'name'  => $data_artists['first_name'],
                     'logged' => TRUE,
-                    'role'=>3
+                     'purchase'=>false
+
                 ];
            
                 session($sessionData);
                
-                return redirect('artists')->with('status','Logged In Successfully.');
+                return redirect('artisthome')->with('status','Logged In Successfully.');
             } else {
                 return redirect('login')->with('status','Wrong password. Please enter correct password');
             }
@@ -189,6 +193,8 @@ class Registration extends Controller
                     'email' => $data_attendee['email'],
                     'name'  => $data_attendee['last_name'],
                     'logged' => TRUE,
+                    'purchase'=>false
+
                 ];
            
                 session($sessionData);
@@ -209,6 +215,8 @@ class Registration extends Controller
                     'email' => $data_organiser['email'],
                     'name'  => $data_organiser['admin_name'],
                     'logged' => TRUE,
+                    'purchase'=>false
+
                 ];
            
                 session($sessionData);

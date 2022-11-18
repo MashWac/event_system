@@ -28,34 +28,11 @@
     <div class="card-body">
     <div class="swiper mySwiper container py-4">
     <div class="swiper-wrapper content">
+    @foreach($data['albums'] as $item) 
     <div class="swiper-slide card" style="width: 18rem;">
-      <img src="/frontend/assets/sautisol.jpg"  height="300px" width="300px" class="card-img-top" alt="...">
-      <div class="card-body">
-        <h5 class="card-title">Sauti Sol</h5>
-        <a href="#" class="btn btn-dark">View Artist</a>
-      </div>
+      <img src="{{asset('/assets/uploads/albums/'.$item->album) }}"  height="300px" width="300px" class="card-img-top" alt="...">
     </div>
-    <div class="swiper-slide card" style="width: 18rem;">
-      <img src="/frontend/assets/Mejja.jpg"  height="300px" width="300px" class="card-img-top" alt="...">
-      <div class="card-body">
-        <h5 class="card-title">Mejja</h5>
-        <a href="#" class="btn btn-dark">View Artist</a>
-      </div>
-    </div>
-    <div class="swiper-slide card" style="width: 18rem;">
-      <img src="/frontend/assets/ndovunikuu.jpg"  height="300px" width="300px" class="card-img-top" alt="...">
-      <div class="card-body">
-        <h5 class="card-title">Ndovu Ni Kuu</h5>
-        <a href="#" class="btn btn-dark">View Artist</a>
-      </div>
-    </div>
-    <div class="swiper-slide card" style="width: 18rem;">
-      <img src="/frontend/assets/juakali.jpg" height="300px" width="300px" class="card-img-top" alt="...">
-      <div class="card-body">
-        <h5 class="card-title">JuaKali</h5>
-        <a href="#" class="btn btn-dark">View Artist</a>
-      </div>
-    </div>
+    @endforeach
     </div>
     <div class="swiper-button-next"></div>
       <div class="swiper-button-prev"></div>
@@ -69,12 +46,19 @@
             <h2 id="headline">Videos</h2>
         </div>
     </div>
-</div>
-<div class="card">
-    <div class="card-header">
-        <div class="headie">
-            <h2 id="headline">Comments</h2>
-        </div>
+    <div class="card-body">
+    <div class="swiper mySwiper container py-4">
+    <div class="swiper-wrapper content">
+    @foreach($data['videos'] as $item)
+    <div class="swiper-slide card" style="width: 18rem;">
+      <img src="{{asset('/assets/uploads/videos/'.$item->video) }}"  height="300px" width="300px" class="card-img-top" alt="...">
+    </div>
+    @endforeach
+    </div>
+    <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-pagination"></div>
+  </div>
     </div>
 </div>
 </div>

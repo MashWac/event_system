@@ -8,10 +8,12 @@
             </div>
         </div>
         <div id="filters">
+            <form action="{{ url('/search') }}" method="GET">
                 <div id="searchboxcrit">
-                    <input type="text" name="searchitem" id="search_item" placeholder="Search Event">
-                    <button type="button" class="btn btn-dark"><ion-icon name="search"></ion-icon></button>
+                    <input type="text" type="search" value="{{ old('searchitem') }}" name="searchitem" id="search_item" placeholder="Search Event">
+                    <button type="submit" class="btn btn-dark"><ion-icon name="search"></ion-icon></button>
                 </div>
+            </form>
             <form action="Displayprods/filterproducts"  method="POST">
 
             <ul id=filteropts>
@@ -56,7 +58,7 @@
                 <div class="col-sm-4 py-1">
                     <div class="card">
                         <input type="text" id="eventflyer" value="asset('/assets/uploads/events/'.$item->event_flyer)" hidden >
-                    <img src="{{asset('/assets/uploads/events/'.$item->event_flyer) }}" height="390px" class="card-img-top" alt="care">
+                        <img src="{{asset('/assets/uploads/events/'.$item->event_flyer) }}" height="390px" class="card-img-top" alt="care">
                         <div class="card-body details">
                             <input type="text" id="eventnames" value="{{$item->event_name}}" hidden >
                             <input type="text" id="eventlocation" value="{{$item->location}}" hidden >
@@ -167,7 +169,9 @@
                
             </div>
             <div class="text-center d-flex justify-content-center">
-                    {{$data['eventmob']->links() }}
+            {{ $data['eventmob']->links() }}
+
+
             </div>
         </div>
     </div>
